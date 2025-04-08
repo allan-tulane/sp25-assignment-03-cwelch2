@@ -40,7 +40,6 @@ def fast_MED(S, T, MED={}):
 
 
 def fast_align_MED(S, T, MED={}):
-    # Top-down memoization with alignment tracking
     key = (S, T)
     if key in MED:
         return MED[key]
@@ -55,12 +54,12 @@ def fast_align_MED(S, T, MED={}):
         dist, (aS, aT) = fast_align_MED(S[1:], T[1:], MED)
         MED[key] = (dist, (S[0] + aS, T[0] + aT))
     else:
-        # Try all three options: insert, delete, substitute
+        # try insert, delete, substitute
         insert_dist, (insert_S, insert_T) = fast_align_MED(S, T[1:], MED)
         delete_dist, (delete_S, delete_T) = fast_align_MED(S[1:], T, MED)
         sub_dist, (sub_S, sub_T) = fast_align_MED(S[1:], T[1:], MED)
 
-        # Add the edit and choose the best
+        # add edit and choose the best
         insert = (1 + insert_dist, ("-" + insert_S, T[0] + insert_T))
         delete = (1 + delete_dist, (S[0] + delete_S, "-" + delete_T))
         substitute = (1 + sub_dist, (S[0] + sub_S, T[0] + sub_T))
